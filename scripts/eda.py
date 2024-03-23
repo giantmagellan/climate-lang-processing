@@ -8,7 +8,8 @@ from sklearn.feature_extraction.text import CountVectorizer
 # DISTRIBUTIONS #
 # ------------- #
 
-def get_top_n_ngram(corpus: pd.Series, n_phrases: int=10, ngram_min: int=2, ngram_max: int=2, stopwords: bool=True) -> sns.barplot:
+def get_top_n_ngram(corpus: pd.Series, n_phrases: int=20, ngram_min: int=2, ngram_max: int=2, 
+                    remove_stopwords: bool=True, remove_climate_phrases: bool=True) -> sns.barplot:
     """
     Finds most common n-gram phrases in a given corpus and plot its distribution.
     :param corpus: pd.Series, text column
@@ -19,7 +20,7 @@ def get_top_n_ngram(corpus: pd.Series, n_phrases: int=10, ngram_min: int=2, ngra
     :return: pd.DataFrame of n-grams and their respective counts
     """
     # Check if n-grams should include stop words
-    if stopwords:
+    if remove_stopwords:
         stopwords = 'english'
     else:
         stopwords = None
@@ -36,17 +37,13 @@ def get_top_n_ngram(corpus: pd.Series, n_phrases: int=10, ngram_min: int=2, ngra
         # Store word frequencies as pd.DataFrame for plotting
         df = pd.DataFrame(words_freq[:n_phrases], columns=['snippets', 'count'])
 
-        # Remove climate bi-gram phrases
-        climate_grams = ["climate change", "global warming", "climate crisis", "greenhouse gas", "greenhouse gases", "carbon tax"]
-        df = df[~df['snippets'].isin(climate_grams)]
-
     except ValueError:
         print("Invalid input")
     
-    return plot_ngram_dist(df)
+    return plot_ngram_dist(df, ngram_max, remove_stopwords, remove_climate_phrases)
 
 
-def plot_ngram_dist(df: pd.DataFrame) -> None:
+def plot_ngram_dist(df: pd.DataFrame, ngram_max: int, remove_stopwords: bool, remove_climate_phrases: bool) -> None:
     """ 
     Plot the n-gram distribution.
     :param df: pd.DataFrame, dataframe of climate news snippets.
@@ -57,11 +54,32 @@ def plot_ngram_dist(df: pd.DataFrame) -> None:
 
     # Plot bar chart of n-gram frequencies
     sns.barplot(df, x='snippets', y='count', legend=False)
-    plt.xticks(rotation=45)
-    plt.title("Phrase Frequencies")
+    
+    # Title conditions
+    if ngram_max == 2:
+        ngram = 'Bi'
+    elif ngram_max == 3:
+        ngram = 'Tri'
+    elif ngram_max == 4:
+        ngram = 'Four'
+    else:
+        ngram = 'N'
+
+    if remove_stopwords:
+        sw_condition = 'After'  
+    else:  
+        sw_condition = 'Before'
+
+    if remove_climate_phrases:
+        cp_condition = 'And Climate Phrases' 
+    else: 
+        cp_condition = ''
+    
+    plt.title(f"{ngram}-Gram Distribution {sw_condition} Removing Stop Words {cp_condition}", fontweight='bold')
+    plt.xticks(rotation=60, fontsize=8)
     plt.xlabel("N-Grams")
     plt.ylabel("Count")
 
     # Save and show plot
-    plt.savefig('figures/n_gram_frequencies.png')
+    plt.savefig(f'figures/{ngram_max}_gram_dist_{sw_condition}_sw_{cp_condition}_removal.png')
     plt.show()
