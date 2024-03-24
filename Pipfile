@@ -13,6 +13,10 @@ transformers = "*"
 nltk = "*"
 scikit-learn = "*"
 wordcloud = "*"
+boto3 = "*"
+s3fs = "*"
+labextension = "*"
+install = "*"
 
 [dev-packages]
 
