@@ -26,7 +26,8 @@ topic_introduction = """
     You will analyze a news article snippet. \
     Your task is to provide a label for the snippet based on text found within the snippet. \
     Remember, the snippets were taken because they contained at least one of the following phrases: \
-    climate change, global warming, climate crisis, greenhouse gas, greenhouse gasses, and carbon tax.
+    climate change, global warming, climate crisis, greenhouse gas, greenhouse gasses, and carbon tax.\
+    The subject cannot be either of these phrases.
     """
 
 topic_instructions = """

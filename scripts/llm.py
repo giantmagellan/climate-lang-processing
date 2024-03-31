@@ -13,11 +13,12 @@ def generate_llm_output(payload: dict=None) -> str:
     """
     start_time = time.time()
     try:
+        snippet = payload["snippet"]
         if not snippet:
             return "No news snippet to analyze."
         else:
             # Create LLM prompt
-            snippet = payload["snippet"]
+            
             sys_prompt, intro, instruct = payload['system_prompt'], payload['introduction'], payload['instruction']
             prompt = build_prompt(sys_prompt, intro, instruct, snippet)
 
