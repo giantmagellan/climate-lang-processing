@@ -6,7 +6,7 @@ from openai import OpenAI
 from helper import build_prompt
 
 
-def append_topic_labels(df: pd.DataFrame, payload: dict) -> pd.DataFrame:
+def append_llm_output(df: pd.DataFrame, payload: dict, result_col: str) -> pd.DataFrame:
     """
     Updates the original DataFrame by assigning generated topic labels to each snippet
     based on the index of the snippet.
@@ -17,11 +17,11 @@ def append_topic_labels(df: pd.DataFrame, payload: dict) -> pd.DataFrame:
     for index, row in df.iterrows():
         payload["snippet"] = row['snippet']
 
-        # Generate the topic label for the snippet
-        gpt_topic_label = generate_llm_output(payload)
+        # Generate the output for the snippet
+        output= generate_llm_output(payload)
         
         # Update the DataFrame directly at the current index
-        df.at[index, 'gpt_topic_label'] = gpt_topic_label
+        df.at[index, result_col] = output
 
         # Buffer between calls
         time.sleep(2.5)

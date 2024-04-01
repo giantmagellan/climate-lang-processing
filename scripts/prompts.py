@@ -16,8 +16,9 @@ DEFAULT_SYSTEM_PROMPT = """\
 #  TOPIC MODELING #
 # --------------- #
 system_prompt_topic = """
-    I need you to label the subject of a snippet from a news article about climate change. Each snippet was taken because it contained \
-    at least one of the following 6 phrases: climate change, global warming, climate crisis, greenhouse gas, greenhouse \
+    I need you to label the subject of a snippet from a news article about climate change. \
+    Each snippet was taken because it contained at least one of the following 6 phrases: \
+        climate change, global warming, climate crisis, greenhouse gas, greenhouse \
     gasses, and carbon tax.
     """
 
@@ -50,7 +51,31 @@ topic_instructions = """
 # ------------------- #
 #  SENTIMENT ANALYSIS #
 # ------------------- #
+system_prompt_sentiment = """
+    I need you to classify the sentiment of a snippet from a news article about climate change as positive or negative. \
+    Each snippet was taken because it contained at least one of the following 6 phrases: \
+        climate change, global warming, climate crisis, greenhouse gas, greenhouse \
+    gasses, and carbon tax.
+    """
 
 sentiment_introduction = """
+    Introduction: \
+    You will analyze a news article snippet. \
+    Your task is to classify the sentiment for the snippet based on text found within the snippet. \
+    Remember, the snippets were taken because they contained at least one of the following phrases: \
+        climate change, global warming, climate crisis, greenhouse gas, greenhouse gasses, and carbon tax.\
+    """
 
+sentiment_instructions = """
+    Instructions: \ 
+    Example input snippets: \
+    global action to reduce greenhouse gases. however, the us secretary of state, rex tillerson told the ministers, // Neutral \
+    carbon emissions have been reduced by 10% // Positive
+    warming rate is increasing // Negative
+
+    The expected output is a single string. \
+    Classify the snippet as positive, negative, or neutral. \
+    Do not add any extra information. \
+    Do not provide additional punctation. \ 
+    Do not provide further explanation of the results.
     """
