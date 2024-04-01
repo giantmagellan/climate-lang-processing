@@ -6,10 +6,34 @@ from openai import OpenAI
 from helper import build_prompt
 
 
+def append_topic_labels(df: pd.DataFrame, payload: dict) -> pd.DataFrame:
+    """
+    Updates the original DataFrame by assigning generated topic labels to each snippet
+    based on the index of the snippet.
+    :param df: pd.DataFrame, dataframe with snippets that need topic labels.
+    :param payload: dict, prompt payload
+    :return: pd.DataFrame, validation set plus updated 'gpt_topic_label' column
+    """
+    for index, row in df.iterrows():
+        payload["snippet"] = row['snippet']
+
+        # Generate the topic label for the snippet
+        gpt_topic_label = generate_llm_output(payload)
+        
+        # Update the DataFrame directly at the current index
+        df.at[index, 'gpt_topic_label'] = gpt_topic_label
+
+        # Buffer between calls
+        time.sleep(2.5)
+        
+    return df
+
+
 def generate_llm_output(payload: dict=None) -> str:
     """
     Generates response from LLM.
-    :param payload: dict, 
+    :param payload: dict, prompt and snippet payload
+    :return: str, snippet topic label
     """
     start_time = time.time()
     try:
@@ -18,7 +42,6 @@ def generate_llm_output(payload: dict=None) -> str:
             return "No news snippet to analyze."
         else:
             # Create LLM prompt
-            
             sys_prompt, intro, instruct = payload['system_prompt'], payload['introduction'], payload['instruction']
             prompt = build_prompt(sys_prompt, intro, instruct, snippet)
 

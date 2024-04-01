@@ -38,7 +38,9 @@ topic_instructions = """
     The expected output is a single string like the following example:
     greenhouse gas reduction
 
-    If a subject is not clear, create a label based on the context of the snippet. \
+    Create a label based on the initial subject, verb, and object of the snippet. \
+    Each label shall contain no less than 2 words and no more than 3 words. \
+    No label shall contain a stopword like 'and', 'its', 'an', 'the', 'for', and 'that', \
     However, if you cannot create a label, assign the value as 'Unknown', \
     Do not add any extra information. \
     Do not provide additional punctation. \ 
