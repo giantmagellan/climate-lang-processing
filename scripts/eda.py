@@ -35,12 +35,14 @@ def get_top_n_ngram(corpus: pd.Series, n_phrases: int=20, ngram_min: int=2, ngra
         words_freq = sorted(words_freq, key = lambda x: x[1], reverse=True)
 
         # Store word frequencies as pd.DataFrame for plotting
-        df = pd.DataFrame(words_freq[:n_phrases], columns=['snippets', 'count'])
+        df = pd.DataFrame(words_freq[:n_phrases], columns=['phrases', 'count'])
+
+        plot_ngram_dist(df, ngram_max, remove_stopwords, remove_climate_phrases)
 
     except ValueError:
         print("Invalid input")
     
-    return plot_ngram_dist(df, ngram_max, remove_stopwords, remove_climate_phrases)
+    return df
 
 
 def plot_ngram_dist(df: pd.DataFrame, ngram_max: int, remove_stopwords: bool, remove_climate_phrases: bool) -> None:
