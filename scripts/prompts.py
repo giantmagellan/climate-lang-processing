@@ -16,7 +16,7 @@ DEFAULT_SYSTEM_PROMPT = """\
 #  TOPIC MODELING #
 # --------------- #
 system_prompt_topic = """
-    I need you to label the subject of a snippet from a news article about climate change. \
+    I need you to label the topic of a snippet from a news article about climate change. \
     Each snippet was taken because it contained at least one of the following 6 phrases: \
         climate change, global warming, climate crisis, greenhouse gas, greenhouse \
     gasses, and carbon tax.
@@ -28,7 +28,7 @@ topic_introduction = """
     Your task is to provide a label for the snippet based on text found within the snippet. \
     Remember, the snippets were taken because they contained at least one of the following phrases: \
     climate change, global warming, climate crisis, greenhouse gas, greenhouse gasses, and carbon tax.\
-    The subject cannot be either of these phrases.
+    The topic cannot be either of these phrases.
     """
 
 topic_instructions = """
@@ -39,7 +39,9 @@ topic_instructions = """
     The expected output is a single string like the following example:
     greenhouse gas reduction
 
-    Create a label based on the initial subject, verb, and object of the snippet. \
+    Create a label based on the initial topic, verb, and object of the snippet. \
+    Limit the number of topic labels to 5. \
+    Label each of the snippets with one of these 5 topic labels. \
     Each label shall contain no less than 2 words and no more than 3 words. \
     No label shall contain a stopword like 'and', 'its', 'an', 'the', 'for', and 'that', \
     However, if you cannot create a label, assign the value as 'Unknown', \

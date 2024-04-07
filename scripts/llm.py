@@ -18,7 +18,7 @@ def append_llm_output(df: pd.DataFrame, payload: dict, result_col: str) -> pd.Da
         payload["snippet"] = row['snippet']
 
         # Generate the output for the snippet
-        output= generate_llm_output(payload)
+        output = generate_llm_output(payload)
         
         # Update the DataFrame directly at the current index
         df.at[index, result_col] = output
@@ -49,11 +49,16 @@ def generate_llm_output(payload: dict=None) -> str:
                 "gpt-3.5-turbo-0125", 
                 "gpt-4"
                 ]
-            return get_llm_response(prompt, model_urls[0])
+            response = get_llm_response(prompt, model_urls[0])
+            if response == "Unknown":
+                time.sleep(2) 
+                response = get_llm_response(prompt, model_urls[0]) 
+
+            return response
         
     except Exception as e:
         print(f"An error {e} occurred when generating response.")
-    
+        
     print(f"Elapsed runtime: {round(time.time() - start_time, 2)} seconds.")
 
 
