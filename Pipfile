@@ -15,8 +15,10 @@ scikit-learn = "*"
 wordcloud = "*"
 boto3 = "*"
 s3fs = "*"
-labextension = "*"
 install = "*"
+textblob = "*"
+pyldavis = "*"
+gensim = "*"
 
 [dev-packages]
 ipykernel = "*"
