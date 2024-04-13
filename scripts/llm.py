@@ -24,7 +24,7 @@ def append_llm_output(df: pd.DataFrame, payload: dict, result_col: str) -> pd.Da
         df.at[index, result_col] = output
 
         # Buffer between calls
-        time.sleep(2.5)
+        time.sleep(3)
         
     return df
 
@@ -47,7 +47,8 @@ def generate_llm_output(payload: dict=None) -> str:
 
             model_urls = [
                 "gpt-3.5-turbo-0125", 
-                "gpt-4"
+                "gpt-4",
+                "text-embedding-3-small"
                 ]
             response = get_llm_response(prompt, model_urls[0])
             if response == "Unknown":

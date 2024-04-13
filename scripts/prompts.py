@@ -24,11 +24,14 @@ system_prompt_topic = """
 
 topic_introduction = """
     Introduction: \
-    You will analyze a news article snippet. \
+    You will analyze a news snippet. \
+    These snippets were pulled from news articles or transcribed from a news broadcast. \
     Your task is to provide a label for the snippet based on text found within the snippet. \
+    In some cases, the snippet may contain multiple subjects. \
     Remember, the snippets were taken because they contained at least one of the following phrases: \
     climate change, global warming, climate crisis, greenhouse gas, greenhouse gasses, and carbon tax.\
-    The topic cannot be either of these phrases.
+    The topic cannot be either of these phrases but should attempt to disregard the subjects in the snippet
+        that are not related to the above climate phrases.
     """
 
 topic_instructions = """
