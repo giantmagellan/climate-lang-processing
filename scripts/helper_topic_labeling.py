@@ -1,43 +1,9 @@
-import os
-import pandas as pd
 import numpy as np
 from typing import Tuple
 
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.cluster import KMeans
 from sklearn.metrics.pairwise import cosine_similarity
-
-from rouge import Rouge
-from bert_score import BERTScorer
-
-from prompts import B_SYS, E_SYS, B_INST, E_INST 
-from prompts import DEFAULT_SYSTEM_PROMPT
-
-
-def build_prompt(introduction: str, instructions: str, system_prompt: str=DEFAULT_SYSTEM_PROMPT, 
-                 snippet: str=None) -> str:
-    """
-    Creates a prompt template by combining a default system prompt and
-    a task-specific set of instructions.
-    :param instruction: str, instructions for the model to perform.
-    :param system_prompt: str, system prompt w/ ethical standards.
-    :return transcript: str, transcript to be summarized.
-    """
-    try:
-        system_prompt = f"{B_SYS}{system_prompt}{E_SYS}"
-        prompt_template = f"{system_prompt}\n{introduction}"
-        instructions = f"{B_INST}{instructions}{E_INST}"
-
-        prompt = "".join([
-            prompt_template,
-            snippet, 
-            instructions
-        ])
-        
-        return prompt
-    
-    except ValueError:
-        print("Improper inputs provided.")
 
 
 # -------------- #
@@ -98,35 +64,3 @@ def cluster_topic_labels(topic_labels: np.ndarray, num_clusters=5) -> Tuple[np.n
     category_names = [topic_labels[index] for index in closest]
 
     return km.labels_, category_names
-
-
-# ------------ #
-# EVAL METRICS #
-# ------------ #
-
-def bert_scorer(topic: str, topic_ref: str) -> float:
-    """
-    :param topic: str, topic label
-    :param topic_ref: str, reference topic 
-    :return: float, F1 Score
-    """
-    # Instantiate the BERTScorer object for English language
-    scorer = BERTScorer(lang="en")
-
-    # P1, R1, F1 represent Precision, Recall, and F1 Score respectively
-    P1, R1, F1 = scorer.score([topic], [topic_ref])
-    return F1.tolist()[0]
-
-
-def rouge_scorer(topic: str, topic_ref: str) -> list:
-    """ 
-    Calculates Rouge Scores.
-    :param text: str, input text
-    :param ref_text: str, reference text
-    :return: list
-    """
-    # Calculate the ROUGE scores for both topic labels using reference
-    rouge = Rouge()
-    eval_1_rouge = rouge.get_scores(topic, topic_ref)
-
-    return eval_1_rouge[0]['rouge-1']['f']
