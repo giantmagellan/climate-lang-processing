@@ -27,7 +27,7 @@ def get_top_n_ngram(corpus: pd.Series, n_phrases: int=20, ngram_min: int=2, ngra
 
     try: 
         vec = CountVectorizer(ngram_range=(ngram_min, ngram_max), stop_words=stopwords).fit(corpus)
-
+        
         bag_of_words = vec.transform(corpus)
         sum_words = bag_of_words.sum(axis=0)
         
@@ -55,7 +55,7 @@ def plot_ngram_dist(df: pd.DataFrame, ngram_max: int, remove_stopwords: bool, re
     sns.set_theme(rc={'figure.figsize':(10,4)})
 
     # Plot bar chart of n-gram frequencies
-    sns.barplot(df, x='snippets', y='count', legend=False)
+    sns.barplot(df, x='phrases', y='count', legend=False)
     
     # Title conditions
     if ngram_max == 2:
@@ -83,5 +83,5 @@ def plot_ngram_dist(df: pd.DataFrame, ngram_max: int, remove_stopwords: bool, re
     plt.ylabel("Count")
 
     # Save and show plot
-    plt.savefig(f'figures/{ngram_max}_gram_dist_{sw_condition}_sw_{cp_condition}_removal.png')
+    plt.savefig(f'scripts/figures/{ngram_max}_gram_dist_{sw_condition}_sw_{cp_condition}_removal.png')
     plt.show()

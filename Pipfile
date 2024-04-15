@@ -19,6 +19,8 @@ install = "*"
 textblob = "*"
 pyldavis = "*"
 gensim = "*"
+bert-score = "*"
+openai = "*"
 
 [dev-packages]
 ipykernel = "*"

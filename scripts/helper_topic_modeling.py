@@ -1,48 +1,24 @@
-import os
-import pandas as pd
 import numpy as np
 from typing import Tuple
+
+from string import punctuation
+from nltk.corpus import stopwords
+from collections import defaultdict, Counter
+from wordcloud import WordCloud
 
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.cluster import KMeans
 from sklearn.metrics.pairwise import cosine_similarity
 
-from rouge import Rouge
-from bert_score import BERTScorer
+from sklearn.feature_extraction.text import CountVectorizer, TfidfVectorizer
+from sklearn.decomposition import NMF, TruncatedSVD, LatentDirichletAllocation
+import pyLDAvis
+import pyLDAvis.lda_model
+import pyLDAvis.gensim_models
 
-from prompts import B_SYS, E_SYS, B_INST, E_INST 
-from prompts import DEFAULT_SYSTEM_PROMPT
-
-
-def build_prompt(introduction: str, instructions: str, system_prompt: str=DEFAULT_SYSTEM_PROMPT, 
-                 snippet: str=None) -> str:
-    """
-    Creates a prompt template by combining a default system prompt and
-    a task-specific set of instructions.
-    :param instruction: str, instructions for the model to perform.
-    :param system_prompt: str, system prompt w/ ethical standards.
-    :return transcript: str, transcript to be summarized.
-    """
-    try:
-        system_prompt = f"{B_SYS}{system_prompt}{E_SYS}"
-        prompt_template = f"{system_prompt}\n{introduction}"
-        instructions = f"{B_INST}{instructions}{E_INST}"
-
-        prompt = "".join([
-            prompt_template,
-            snippet, 
-            instructions
-        ])
-        
-        return prompt
-    
-    except ValueError:
-        print("Improper inputs provided.")
-
-
-# -------------- #
-# TOPIC LABELING #
-# -------------- #
+# --------------------- #
+# LARGE LANGUAGE MODELS #
+# --------------------- #
 
 def assign_categories(topic_labels: np.ndarray, num_clusters: int=5) -> dict:
     """
@@ -100,33 +76,29 @@ def cluster_topic_labels(topic_labels: np.ndarray, num_clusters=5) -> Tuple[np.n
     return km.labels_, category_names
 
 
-# ------------ #
-# EVAL METRICS #
-# ------------ #
+# --------------------------- #
+# LATENT DIRICHLET ALLOCATION #
+# --------------------------- #
 
-def bert_scorer(topic: str, topic_ref: str) -> float:
-    """
-    :param topic: str, topic label
-    :param topic_ref: str, reference topic 
-    :return: float, F1 Score
-    """
-    # Instantiate the BERTScorer object for English language
-    scorer = BERTScorer(lang="en")
+def get_topics_from_lda(corpus: pd.Series, ngram_min: int=2, ngram_max: int=2):
 
-    # P1, R1, F1 represent Precision, Recall, and F1 Score respectively
-    P1, R1, F1 = scorer.score([topic], [topic_ref])
-    return F1.tolist()[0]
+    count_vectorizer = CountVectorizer(stop_words='english', min_df=5, max_df=0.7, 
+                                       ngram_range=(ngram_min, ngram_max))
+    count_vectors = count_vectorizer.fit_transform(corpus)
+
+    lda_model = LatentDirichletAllocation(n_components=5, random_state=314)
+    W_lda_matrix = lda_model.fit_transform(count_vectors)
+    H_lda_matrix = lda_model.components_
+
+    display_topics(lda_model, count_vectorizer.get_feature_names_out())
+
+    return lda_model
 
 
-def rouge_scorer(topic: str, topic_ref: str) -> list:
-    """ 
-    Calculates Rouge Scores.
-    :param text: str, input text
-    :param ref_text: str, reference text
-    :return: list
-    """
-    # Calculate the ROUGE scores for both topic labels using reference
-    rouge = Rouge()
-    eval_1_rouge = rouge.get_scores(topic, topic_ref)
-
-    return eval_1_rouge[0]['rouge-1']['f']
+def display_topics(model, features, no_top_words=5):
+    for topic, words in enumerate(model.components_):
+        total = words.sum()
+        largest = words.argsort()[::-1] # invert sort order
+        print("\nTopic %02d" % topic)
+        for i in range(0, no_top_words):
+            print("  %s (%2.2f)" % (features[largest[i]], abs(words[largest[i]]*100.0/total)))
