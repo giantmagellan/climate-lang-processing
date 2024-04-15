@@ -34,6 +34,25 @@ Exit the virtual environment
 
 ``` exit ```
 
+## Usage
+
+### GDELT Project Dataset
+
+Data was downloaded from the [The GDELT Project](https://blog.gdeltproject.org/a-new-dataset-for-exploring-climate-change-narratives-on-television-news-2009-2020/) website. If you seeking to perform your own analysis, store the CSVs in the [data folder](./scripts/data).
+
+### Analysis & Modeling
+
+First, activate the virtual environment and open Jupyter Lab or any IDE of your choosing. 
+
+Next, 0pen the [Main notebook](main.ipynb) for exploratory analysis and descriptive statistics.
+
+Once you have completed the initial analysis, both methods of topic modeling will be available in their respective notebooks. 
+
+#### Reminders
+
+1. LDA Topic Modeling could take over 20 minutes per task. Ensure the proper resources are available.
+2. Running models with ChatGPT require an API key. If one is not available, LLM Topic Modeling will not work.
+
 ## References
 
 Dewan, P. (2024, February 28). Map Shows Climate Change Denialism by US State. 	Newsweek. Retrieved on March 4, 2024, from https://www.newsweek.com/map-climate-change-denialism-us-state-1874412
