@@ -1,6 +1,7 @@
 import os
 import json
 import litellm
+from openai import OpenAI
 import boto3
 from botocore.config import Config
 from botocore.exceptions import ClientError
@@ -34,6 +35,23 @@ class LLMResponseGenerator:
             drop_params=True
         )
         return response.choices[0].message.content
+    
+    def generate_openai_response(self, prompt: str) -> str:
+        """
+        Get response from ChatGPT.
+        :param prompt: str, instruction prompt for LLM
+        :param model_url: str, model name
+        :return: str, LLM response
+        """
+        
+        client = OpenAI(api_key=os.environ.get('OPEN_AI_KEY'))
+
+        response = client.chat.completions.create(
+            model = self.model_id,
+            messages = [{"role": "user", "content": prompt}],
+            temperature = 0.7,
+        )
+        return response.choices[0].message.content 
 
     @staticmethod
     def _get_bedrock_client():
