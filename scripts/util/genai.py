@@ -5,17 +5,19 @@ import boto3
 from botocore.config import Config
 from botocore.exceptions import ClientError
 
+from models import ModelIDManager
+
 
 class GenerateLLMResponse:
 
-    def __init__(self, model_id=None):
+    def __init__(self, host=str):
         """
         Initialize class with a model ID.
         :param model_id: str, model id/name (optional). Defaults to environment variable MODEL_ID.
         """
-        self.model_id = model_id or os.getenv("MODEL_ID")
-        if not self.model_id: raise ValueError("Model ID required.")
-
+        self.host = host
+        self.model_id_manager = ModelIDManager()
+        self.model_id = self.model_id_manager.get_model_id(host)
 
     def generate_groq_response(self, prompt: str) -> str:
         """
@@ -32,7 +34,6 @@ class GenerateLLMResponse:
             drop_params=True
         )
         return response.choices[0].message.content
-
 
     @staticmethod
     def _get_bedrock_client():
@@ -52,7 +53,6 @@ class GenerateLLMResponse:
             aws_secret_access_key=os.environ["AWS_BEDROCK_SECRET_ACCESS_KEY"],
             config=botocore_config
         )
-    
 
     def generate_bedrock_response(self, prompt: str) -> str:
         """
