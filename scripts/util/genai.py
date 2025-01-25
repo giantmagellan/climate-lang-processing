@@ -8,7 +8,7 @@ from botocore.exceptions import ClientError
 from models import ModelIDManager
 
 
-class GenerateLLMResponse:
+class LLMResponseGenerator:
 
     def __init__(self, host=str):
         """
