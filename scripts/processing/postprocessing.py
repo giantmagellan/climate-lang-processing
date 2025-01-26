@@ -1,3 +1,7 @@
+import pandas as pd
+
+
+
 def append_llm_output(df: pd.DataFrame, payload: dict, result_col: str) -> pd.DataFrame:
     """
     Updates the original DataFrame by assigning generated topic labels to each snippet

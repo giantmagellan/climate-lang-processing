@@ -22,7 +22,6 @@ gensim = "*"
 bert-score = "*"
 openai = "*"
 litellm = "*"
-boto3 = "*"
 
 [dev-packages]
 ipykernel = "*"
