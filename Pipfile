@@ -21,6 +21,7 @@ pyldavis = "*"
 gensim = "*"
 bert-score = "*"
 openai = "*"
+litellm = "*"
 
 [dev-packages]
 ipykernel = "*"

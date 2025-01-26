@@ -1,0 +1,17 @@
+{   
+    "B_TEXT": "<|begin_of_text|>",
+    "E_TEXT": "<|end_of_text|>",
+    "EOT_ID": "<|eot_id|>",
+    "HEADER_ID": "<|start_header_id|>{role}<|end_header_id|>\n",
+    "HEADER_ID_SYS": "HEADER_ID.format(role = 'system')",
+    "HEADER_ID_USER": "HEADER_ID.format(role = 'user')",
+    "HEADER_ID_ASSIST": "HEADER_ID.format(role = 'assistant')",
+
+    "system": "{B_TEXT}\n{HEADER_ID_SYS} You are a helpful, respectful, and honest assistant. Answer as helpfully as possible. Your answers should not include any harmful, unethical, racist, sexist, toxic, dangerous, or illegal content. Ensure your responses are socially unbiased and positive in nature.\nIf the request does not make sense, explain why instead of answering. If you do not know the answer to a request, do not share false information.\nYou will be provided with a set of instructions and a request.{EOT_ID}\n\n",
+
+    "topic_introduction": "{HEADER_ID_USER} The following snippets were transcribed from tv news broadcasts. Your task is to categorize the snippet in terms of their relation to climate change. Some snippets contain multiple subjects, so do your best to disregard the non-climate phrases.\n\n",
+    "topic_instructions": "Example:\nInput:\nglobal action to reduce greenhouse gases. however, the us secretary of state, rex tillerson told the ministers,\n\nExpected Output:\ngreenhouse gas reduction\n\nCreate a label based on the initial topic, verb, and object of the snippet.\n Limit the number of topic labels to 5. \n Label each of the snippets with one of these 5 topic labels. \n Each label shall contain no less than 2 words and no more than 3 words. \n No label shall contain a stopword like 'and', 'its', 'an', 'the', 'for', and 'that', \n However, if you cannot create a label, assign the value as 'Unknown', \n Do not add any extra information. \n Do not provide additional punctation. \n Do not provide further explanation of the results.{EOT_ID}",
+
+    "sentiment_introduction": "{HEADER_ID_USER} The following snippets were transcribed from tv news broadcasts. Your task is to determine the sentiment of the snippet as postive, negative, or neutral.\n\n",
+    "sentiment_instructions": "Example\nInput:\nglobal action to reduce greenhouse gases however, the us secretary of state, rex tillerson told the ministers, // Neutral \ncarbon emissions have been reduced by 10% // Positive\n warming rate is increasing // Negative\n\nClassify the snippet as positive, negative, or neutral. \nDo not add any extra information. \nDo not provide additional punctation. \nDo not provide further explanation of the results.{EOT_ID}"
+}
